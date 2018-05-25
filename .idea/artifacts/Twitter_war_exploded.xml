@@ -1,0 +1,20 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Twitter:war exploded">
+    <output-path>$PROJECT_DIR$/Twitter/out/artifacts/Twitter_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Twitter" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="lib" />
+          <element id="library" level="project" name="javax.persistence" />
+          <element id="library" level="project" name="org.eclipse.persistence:org.eclipse.persistence.jpa:2.7.0" />
+          <element id="library" level="project" name="org.xerial:sqlite-jdbc:3.21.0" />
+          <element id="library" level="project" name="mysql:mysql-connector-java:5.1.45" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="Twitter/web/Web" />
+    </root>
+  </artifact>
+</component>
