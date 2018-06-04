@@ -15,8 +15,21 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="" />
-        <datasource-mapping />
+        <datasource-mapping>
+          <factory-entry name="Projet_JPA_MYSQL" />
+          <factory-entry name="Projet_JPA_SQLITE" />
+        </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/web/WEB-INF/persistence.xml" />
+      </configuration>
+    </facet>
+    <facet type="web" name="Web2">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/out/artifacts/Twitter_war_exploded/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/out/artifacts/Twitter_war_exploded" relative="/" />
+        </webroots>
       </configuration>
     </facet>
   </component>
@@ -28,9 +41,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="lib" level="project" />
-    <orderEntry type="library" name="javax.persistence" level="project" />
-    <orderEntry type="library" name="org.eclipse.persistence:org.eclipse.persistence.jpa:2.7.0" level="project" />
-    <orderEntry type="library" name="org.xerial:sqlite-jdbc:3.21.0" level="project" />
-    <orderEntry type="library" name="mysql:mysql-connector-java:5.1.45" level="project" />
+    <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
   </component>
 </module>
