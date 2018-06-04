@@ -4,11 +4,15 @@ import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
+import org.omg.CosNaming.NamingContextPackage.CannotProceed;
+import org.omg.CosNaming.NamingContextPackage.NotFound;
+import therealtwitter.CORBA.TwitterServiceApp.TwitterService;
+import therealtwitter.CORBA.TwitterServiceApp.TwitterServiceHelper;
 
 import java.util.Properties;
 
 public class MainClient {
-    public static void main(String[] argv) throws InvalidName {
+    public static void main(String[] argv) throws InvalidName, CannotProceed, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound {
         System.out.println("Hey i'm a client");
         // Paramétrage pour la création de la couche ORB :
         // localisation de l'annuaire d'objet (service nommage)
@@ -27,9 +31,8 @@ public class MainClient {
         /** Etape 3 **/
         // Recherche d'une référence sur le service météo
         org.omg.CORBA.Object monServiceRef;
-        //monServiceRef = namingContext.resolve_str("MonService");
-        //TODO: Instance du service Twitter à partir de sa référence (cast)
-        //MonService monService = MonServiceHelper.narrow(monServiceRef);
+        monServiceRef = serviceNommage.resolve_str("MonService");
+        TwitterService monService = TwitterServiceHelper.narrow(monServiceRef);
 
     }
 }

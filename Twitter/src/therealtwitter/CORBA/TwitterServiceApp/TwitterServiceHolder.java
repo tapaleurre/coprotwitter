@@ -1,4 +1,4 @@
-package therealtwitter.Client.CORBA.TwitterServiceApp;
+package therealtwitter.CORBA.TwitterServiceApp;
 
 /**
 * TwitterServiceApp/TwitterServiceHolder.java .

@@ -13,9 +13,9 @@ import org.omg.PortableServer.POAHelper;
 import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
 import org.omg.PortableServer.POAPackage.ServantNotActive;
 import org.omg.PortableServer.POAPackage.WrongPolicy;
-import therealtwitter.Client.CORBA.TwitterServiceApp.TwitterService;
-import therealtwitter.Client.CORBA.TwitterServiceApp.TwitterServiceHelper;
-import therealtwitter.Client.CORBA.TwitterServiceApp.TwitterServicePOA;
+import therealtwitter.CORBA.TwitterServiceApp.TwitterService;
+import therealtwitter.CORBA.TwitterServiceApp.TwitterServiceHelper;
+import therealtwitter.CORBA.TwitterServiceApp.TwitterServicePOA;
 
 import java.util.Properties;
 
