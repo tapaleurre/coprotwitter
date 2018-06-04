@@ -1,0 +1,6 @@
+module TwitterServiceApp{
+    interface TwitterService{
+        string ping();
+        oneway void shutdown();
+    };
+};
