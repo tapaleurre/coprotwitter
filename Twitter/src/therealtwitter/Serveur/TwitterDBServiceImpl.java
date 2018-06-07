@@ -21,12 +21,11 @@ public class TwitterDBServiceImpl extends UnicastRemoteObject implements Twitter
 
 
 
-    @Override
     public Utilisateur connect(String username, String password) throws RemoteException {
         return (loggedUser(username, password));
     }
 
-    @Override
+
     public boolean existsTarget(String targetName) throws RemoteException {
         return existsUser(targetName);
     }
@@ -38,7 +37,7 @@ public class TwitterDBServiceImpl extends UnicastRemoteObject implements Twitter
         return null;
     }
 
-    @Override
+
     public boolean existsUser(String username){
         return findUser(username)!=null;
     }
@@ -74,15 +73,47 @@ public class TwitterDBServiceImpl extends UnicastRemoteObject implements Twitter
         this.nomUtilisateurs.remove(username);
     }
     @Override
-    public boolean isUserPasswordCorrect(String username, String password) throws RemoteException{
-       if(utilisateur.getUsername() == username && utilisateur.getPassword() == password){
-           return true;
-       }
-       else{
-           return false;
-       }
+    public boolean isUserPasswordCorrect(String username, String password) throws RemoteException {
+        if (utilisateur.getUsername() == username && utilisateur.getPassword() == password) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    @Override
+    public List<String> getUsersFollowing(String username) throws RemoteException{
 
 
+        Utilisateur u = Utilisateur.getUtilisateur(username);
+        return u.getFollowedUsers();
+
+    }
+
+     @Override
+     public List<String> getUsersFollowedBy(String username) throws RemoteException{
+
+
+    }
+
+     @Override
+     public void startFollowing(String followerUsername, String followedUsername) throws RemoteException{
+
+    }
+
+     @Override
+     public void stopFollowing(String followerUsername, String followedUsername) throws RemoteException{
+
+     }
+
+     @Override
+     public void createNewTweet(String username, String tweet) throws RemoteException {
+
+     }
+
+     @Override
+     public List<String> getTweetsOfUser(String username) throws RemoteException{
+
+     }
 
     }
 
