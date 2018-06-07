@@ -68,8 +68,22 @@ public class TwitterDBServiceImpl extends UnicastRemoteObject implements Twitter
             Utilisateur uti = new Utilisateur(username, password);
         }
     }
+    @Override
+    public void removeUser(String username) throws RemoteException{
+        if(this.nomUtilisateurs.)
+        this.nomUtilisateurs.remove(username);
+    }
+    @Override
     public boolean isUserPasswordCorrect(String username, String password) throws RemoteException{
-        Utilisateur.getUsername()
+       if(utilisateur.getUsername() == username && utilisateur.getPassword() == password){
+           return true;
+       }
+       else{
+           return false;
+       }
+
+
+
     }
 
 

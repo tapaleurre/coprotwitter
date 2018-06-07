@@ -54,7 +54,7 @@ public class Utilisateur implements Serializable {
         }else System.out.println("user already added");
     }
 
-    private Utilisateur getUtilisateur(String user){
+    public Utilisateur getUtilisateur(String user){
         System.out.println("SEARCHING : "+user);
         for (Utilisateur u : followedUsers)
             if (u.getUsername().equals(user)){
