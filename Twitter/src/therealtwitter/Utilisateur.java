@@ -1,4 +1,4 @@
-package therealtwitter.Serveur;
+package therealtwitter;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,6 +1,7 @@
 package therealtwitter.Serveur;
 
-import javax.rmi.CORBA.Util;
+import therealtwitter.Utilisateur;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
