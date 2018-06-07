@@ -1,8 +1,8 @@
-package therealtwitter.Serveur;
-
-import therealtwitter.Utilisateur;
+package therealtwitter;
 
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,15 @@ public class TwitterDBServiceImpl extends UnicastRemoteObject implements Twitter
 
     public TwitterDBServiceImpl() throws RemoteException {
 
+        System.setProperty("java.rmi.server.hostname", "localhost");
+
+        // créé le stub du service d'information
+        TwitterDBServiceImpl TwitterDBService = new TwitterDBServiceImpl();
+        TwitterDBService stub = (TwitterDBService) UnicastRemoteObject.exportObject(TwitterDBService, 0);
+
+        // récupere un registre
+        Registry registry = LocateRegistry.getRegistry("86.76.4.24",2000);
+        registry.bind("TwitterDBService", stub);
         utilisateurs = new ArrayList<Utilisateur>();
 
     }
