@@ -41,7 +41,7 @@ public class Utilisateur implements Serializable {
         return twittos;
     }
 
-    private boolean isFollowingUser(String user){
+    /*private boolean isFollowingUser(String user){
         System.out.println("\tisFollowingUser call answer : "+getUtilisateur(user)!=null);
         return getUtilisateur(user)!=null;
     }
@@ -54,7 +54,7 @@ public class Utilisateur implements Serializable {
         }else System.out.println("user already added");
     }
 
-    public static Utilisateur getUtilisateur(String user){
+    /*public static Utilisateur getUtilisateur(String user){
         System.out.println("SEARCHING : "+user);
         for (Utilisateur u : followedUsers)
             if (u.getUsername().equals(user)){
@@ -64,7 +64,7 @@ public class Utilisateur implements Serializable {
         System.out.println("\ton a pas trouvé "+user );
         return null;
 
-    }
+    }*/
 
     public List<Utilisateur> getFollowedUsers() {
         return followedUsers;

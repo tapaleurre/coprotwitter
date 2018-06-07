@@ -1,5 +1,6 @@
-package therealtwitter;
+/*package therealtwitter;
 
+import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -16,15 +17,17 @@ public class TwitterDBServiceImpl extends UnicastRemoteObject implements Twitter
 
     public TwitterDBServiceImpl() throws RemoteException {
 
-        System.setProperty("java.rmi.server.hostname", "localhost");
-
         // créé le stub du service d'information
         TwitterDBServiceImpl TwitterDBService = new TwitterDBServiceImpl();
         TwitterDBService stub = (TwitterDBService) UnicastRemoteObject.exportObject(TwitterDBService, 0);
 
         // récupere un registre
-        Registry registry = LocateRegistry.getRegistry("86.76.4.24",2000);
-        registry.bind("TwitterDBService", stub);
+        Registry registry = LocateRegistry.getRegistry("86.76.4.24",3200);
+        try {
+            registry.bind("TwitterDBService", stub);
+        } catch (AlreadyBoundException e) {
+            e.printStackTrace();
+        }
         utilisateurs = new ArrayList<Utilisateur>();
 
     }
@@ -79,8 +82,10 @@ public class TwitterDBServiceImpl extends UnicastRemoteObject implements Twitter
     }
     @Override
     public void removeUser(String username) throws RemoteException{
-        if(this.nomUtilisateurs.)
-        this.nomUtilisateurs.remove(username);
+        if(existsUser(username)) {
+
+            this.nomUtilisateurs.remove(username);
+        }
     }
     @Override
     public boolean isUserPasswordCorrect(String username, String password) throws RemoteException {
@@ -95,7 +100,7 @@ public class TwitterDBServiceImpl extends UnicastRemoteObject implements Twitter
 
 
         Utilisateur u = Utilisateur.getUtilisateur(username);
-        return u.getFollowedUsers();
+        return null;
 
     }
 
@@ -129,3 +134,4 @@ public class TwitterDBServiceImpl extends UnicastRemoteObject implements Twitter
 
 
 }
+*/

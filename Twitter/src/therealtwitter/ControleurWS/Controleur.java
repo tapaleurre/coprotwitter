@@ -1,4 +1,6 @@
+/*
 package therealtwitter.ControleurWS;
+
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -68,7 +70,7 @@ public class Controleur extends HttpServlet {
      * @throws ServletException
      * @throws IOException
      */
-
+/*
     private void loadJSP(String url, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -85,4 +87,4 @@ public class Controleur extends HttpServlet {
         RequestDispatcher rd = sc.getRequestDispatcher(url);
         rd.forward(request, response);
     }
-}
+}*/
