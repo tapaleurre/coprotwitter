@@ -18,7 +18,7 @@ import therealtwitter.CORBA.TwitterServiceApp.TwitterServiceHelper;
 import therealtwitter.CORBA.TwitterServiceApp.TwitterServicePOA;
 
 import java.util.Properties;
-
+// type "orbd -ORBInitialPort 1337 -ORBInitialHost 120.0.1"
 class TwitterImpl extends TwitterServicePOA {
     private ORB orb;
 
@@ -42,7 +42,7 @@ class TwitterImpl extends TwitterServicePOA {
     }
 }
 
-public class MainServer {
+public class ServerORB {
 
     public static final String SERVICE_NAME = "TwitterService";
 
@@ -51,8 +51,8 @@ public class MainServer {
         // Paramétrage pour la création de la couche ORB :
         // localisation de l'annuaire d'objet (service nommage)
         Properties props = new Properties();
-        props.put("org.omg.TwitterService.ORBInitialPort", "1337");
-        props.put("org.omg.TwitterService.ORBInitialHost", "127.0.0.1");
+        props.put("org.omg.CORBA.ORBInitialHost", "127.0.0.1");
+        props.put("org.omg.CORBA.ORBInitialPort", "1337");
         ORB orb = ORB.init((String[]) null, props);
         //rechercher rootPOA
         org.omg.CORBA.Object poaRef = orb.resolve_initial_references("RootPOA");

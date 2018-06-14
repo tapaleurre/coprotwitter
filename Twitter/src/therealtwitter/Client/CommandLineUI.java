@@ -34,9 +34,9 @@ public class CommandLineUI implements ClientUI {
         System.out.println("Please enter your identifier");
         String id = reader.nextLine();
         System.out.println("Please enter your password");
-        consoleEraser.start();
+        //consoleEraser.start();
         String psw = reader.nextLine();
-        consoleEraser.halt();
+        //consoleEraser.halt();
         System.out.print("\b");
         return new Credential(id, psw);
     }
