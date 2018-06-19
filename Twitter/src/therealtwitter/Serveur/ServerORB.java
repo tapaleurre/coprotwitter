@@ -36,6 +36,31 @@ class TwitterImpl extends TwitterServicePOA {
         return "Pong\n";
     }
 
+    @Override
+    public String getMyInfo() {
+        return null;
+    }
+
+    @Override
+    public String getUserInfo(String username) {
+        return null;
+    }
+
+    @Override
+    public String postTweet(String tweetText) {
+        return null;
+    }
+
+    @Override
+    public String getFeed() {
+        return null;
+    }
+
+    @Override
+    public String connect(String password, String username) {
+        return null;
+    }
+
     // implement shutdown() method
     public void shutdown() {
         orb.shutdown(false);

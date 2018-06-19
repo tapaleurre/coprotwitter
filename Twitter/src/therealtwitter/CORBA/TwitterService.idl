@@ -1,10 +1,15 @@
 module TwitterServiceApp{
+    typedef string Username;
+    typedef string Password;
+    typedef string TweetText;
+
     interface TwitterService{
         string ping();
-        string getUserInfo(String username, String password);
-        string postTweet(String username, String password, String tweet);
-        int createAccount(String username, String password);
-        int connect(String username, String password);
+        string getMyInfo();
+        string getUserInfo(in Username username);
+        string postTweet(in TweetText tweetText);
+        string getFeed();
+        string connect(in Password password, in Username username);
         oneway void shutdown();
     };
 };
