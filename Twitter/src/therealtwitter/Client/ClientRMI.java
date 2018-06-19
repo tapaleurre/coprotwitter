@@ -29,6 +29,8 @@ public class ClientRMI  {
         List users = service.getAllUsers();
         for(int i=0; i<users.size(); i++)
             System.out.println(users.get(i));
+
+
     }
     }
 
