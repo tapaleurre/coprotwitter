@@ -30,4 +30,18 @@ public class Tweet {
 
     public class TweetTooLongException extends Exception {
     }
+
+    /**
+     * Permet de returner le nom de l'utilisateur
+     *
+     * @return string : name
+     */
+    @Override
+    public String toString() {
+        String tweet = "Twittos : " + getAuthor().getUsername() + " à twitté :" + getText() +" \n";
+
+        System.out.println(tweet);
+        return tweet;
+    }
+
 }

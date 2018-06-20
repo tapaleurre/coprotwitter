@@ -69,6 +69,27 @@ public class Utilisateur implements Serializable {
 
     }
 
+    public void createTweet(Tweet t) throws RemoteException, NotBoundException, MalformedURLException {
+        new ClientRMI();
+        if(this.equals(t.author)){
+
+            ClientRMI.getservice().createNewTweet(t.getAuthor().getUsername(),t.getText());
+        }
+    }
+
+    public List<Tweet> getTweet() throws RemoteException, NotBoundException, MalformedURLException, Tweet.TweetTooLongException {
+        new ClientRMI();
+        List<String> tweets = ClientRMI.getservice().getTweetsOfUser(this.getUsername());
+        List<Tweet> ts = new ArrayList<>();
+        for (String tweet : tweets) {
+            Tweet t = new Tweet(tweet,this);
+            ts.add(t);
+        }
+        return ts;
+    }
+
+
+
     public static List<Utilisateur> getUtilisateurs() throws RemoteException, NotBoundException, MalformedURLException {
         new ClientRMI();
         List<String> uti = ClientRMI.getservice().getAllUsers();
