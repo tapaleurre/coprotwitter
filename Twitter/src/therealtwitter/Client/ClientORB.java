@@ -9,6 +9,8 @@ import org.omg.CosNaming.NamingContextPackage.NotFound;
 import therealtwitter.CORBA.TwitterServiceApp.TwitterService;
 import therealtwitter.CORBA.TwitterServiceApp.TwitterServiceHelper;
 import therealtwitter.Credential;
+import therealtwitter.Tweet;
+import therealtwitter.Utilisateur;
 
 import java.util.Properties;
 
@@ -17,6 +19,7 @@ public class ClientORB {
 
     private static ClientUI userInterface;
     public static final String SERVICE_NAME = "TwitterService";
+    private static Utilisateur loggedUser = null;
 
     public static void main(String[] argv) throws InvalidName, CannotProceed, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound {
         System.out.println("Hey i'm a client");
@@ -40,8 +43,47 @@ public class ClientORB {
         TwitterService monService = TwitterServiceHelper.narrow(monServiceRef);
 
         ClientORB.userInterface = new CommandLineUI();
-        Credential credential = userInterface.getCredentials();
+        while(ClientORB.loggedUser == null){
+            Credential credential = userInterface.getCredentials();
+            //TODO: get user
+        }
         System.out.println(monService.ping());
-        System.out.println("Identifier "+credential.getIdentifier());
+        //TODO try to actually connect
+        while (true){
+            switch (userInterface.promptMenu()){
+                case CONNECT:
+                    userInterface.getCredentials();
+                    //TODO try to connect
+                    break;
+                case MY_FEED:
+                    //TODO get all tweets
+                    //userInterface.displayTweets(tweets);
+                    break;
+                case ABOUT_ME:
+                    //TODO: get userinfo
+                    userInterface.displayInfo("");
+                    break;
+                case SEND_TWEET:
+                    try {
+                        Tweet tweet = userInterface.getTweet(loggedUser);
+                        //TODO: send the tweet
+                    } catch (Tweet.TweetTooLongException e) {
+                        e.printStackTrace();
+                        userInterface.displayErrorMessage("Merci de réduire la taille de votre tweet");
+                    }
+                    break;
+                case USER_FEED:
+                    //TODO: get a user's tweets
+                    //userInterface.displayTweets(tweets);
+                    break;
+                case ABOUT_USER:
+                    String username = userInterface.promptUsername();
+                    String userInfo = monService.getUserInfo(username);
+                    userInterface.displayInfo(userInfo);
+                    break;
+                default:
+                    System.err.println("Entrée non reconnue");
+            }
+        }
     }
 }

@@ -9,7 +9,14 @@ import java.util.List;
 public interface ClientUI {
     Credential getCredentials();
     Tweet getTweet(Utilisateur user) throws Tweet.TweetTooLongException;
-    void displayUserInfo(Utilisateur user);
+
+    /**
+     *
+     * @return the action the user selected
+     */
+    UserAction promptMenu();
+    void displayInfo(String s);
     void displayErrorMessage(String s);
     void displayTweets(List<Tweet> tweets);
+    String promptUsername();
 }

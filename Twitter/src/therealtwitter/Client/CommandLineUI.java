@@ -52,6 +52,22 @@ public class CommandLineUI implements ClientUI {
     }
 
     @Override
+    public UserAction promptMenu() {
+        int choice = 0;
+        while(choice <=6 && choice > 0){
+            Scanner reader = new Scanner(System.in);
+            String selection = "";
+            for (UserAction a : UserAction.values()){
+                selection+=a.ordinal()+" - " + a.name() + "\n";
+            }
+            System.out.println(selection);
+            String text = reader.nextLine();
+            choice = Integer.parseInt(text);
+        }
+        return UserAction.values()[choice];
+    }
+
+    @Override
     public void displayTweets(List<Tweet> tweets) {
         String text = "";
         for(Tweet i: tweets){
@@ -63,8 +79,15 @@ public class CommandLineUI implements ClientUI {
     }
 
     @Override
-    public void displayUserInfo(Utilisateur user) {
-        System.out.println("User: "+user.getUsername());
+    public String promptUsername() {
+        System.out.println("Merci d'entrer un nom d'utilisateur:");
+        Scanner reader = new Scanner(System.in);
+        return reader.nextLine();
+    }
+
+    @Override
+    public void displayInfo(String info) {
+        System.out.println(info);
     }
 
     @Override
