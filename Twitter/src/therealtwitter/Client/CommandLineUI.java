@@ -86,6 +86,19 @@ public class CommandLineUI implements ClientUI {
     }
 
     @Override
+    public String followUnfollowUser(String username, Boolean isFollowing) {
+        if(isFollowing){
+            System.out.println("Vous suivez "+username);
+        }else{
+            System.out.println("Vous ne suivez pas "+username);
+        }
+        System.out.println("Pour suivre l'utilisateur tapez \"follow\"");
+        System.out.println("Pour arrêter de suivre l'utilisateur tapez \"unfollow\"");
+        return null;
+    }
+
+
+    @Override
     public void displayInfo(String info) {
         System.out.println(info);
     }

@@ -13,17 +13,25 @@ import org.omg.PortableServer.POAHelper;
 import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
 import org.omg.PortableServer.POAPackage.ServantNotActive;
 import org.omg.PortableServer.POAPackage.WrongPolicy;
+import simo.mi6.project.tier3.TwitterDBService;
 import therealtwitter.CORBA.TwitterServiceApp.TwitterService;
 import therealtwitter.CORBA.TwitterServiceApp.TwitterServiceHelper;
 import therealtwitter.CORBA.TwitterServiceApp.TwitterServicePOA;
+import therealtwitter.Client.ClientRMI;
 
 import java.util.Properties;
 // type "orbd -ORBInitialPort 1337 -ORBInitialHost 120.0.1"
 class TwitterImpl extends TwitterServicePOA {
+    private static TwitterDBService RMIService;
+
     private ORB orb;
 
     public void setORB(ORB orb_val) {
         orb = orb_val;
+    }
+
+    public TwitterImpl(){
+        TwitterImpl.RMIService = ClientRMI.getservice();
     }
 
     // implement sayHello() method
@@ -38,7 +46,8 @@ class TwitterImpl extends TwitterServicePOA {
 
     @Override
     public String getMyInfo() {
-        return null;
+        //return RMIService.getUsersFollowing(ServerORB.);
+        return "kek";
     }
 
     @Override

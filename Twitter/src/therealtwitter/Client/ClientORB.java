@@ -42,6 +42,8 @@ public class ClientORB {
         monServiceRef = serviceNommage.resolve_str(SERVICE_NAME);
         TwitterService monService = TwitterServiceHelper.narrow(monServiceRef);
 
+        monService.ping();
+
         ClientORB.userInterface = new CommandLineUI();
         while(ClientORB.loggedUser == null){
             Credential credential = userInterface.getCredentials();
