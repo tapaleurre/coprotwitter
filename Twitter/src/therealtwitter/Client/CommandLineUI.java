@@ -94,7 +94,13 @@ public class CommandLineUI implements ClientUI {
         }
         System.out.println("Pour suivre l'utilisateur tapez \"follow\"");
         System.out.println("Pour arrêter de suivre l'utilisateur tapez \"unfollow\"");
-        return null;
+        System.out.println("Pour annuler appuyez sur entrée");
+        Scanner reader = new Scanner(System.in);
+        String entry;
+        do{
+            entry = reader.nextLine();
+        }while (!entry.equals("follow")||!entry.equals("unfollow")||!entry.equals(""));
+        return reader.nextLine();
     }
 
 
