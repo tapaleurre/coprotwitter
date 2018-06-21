@@ -1,6 +1,7 @@
 package therealtwitter.Client;
 
 import therealtwitter.Credential;
+import therealtwitter.Serveur.UserInfo;
 import therealtwitter.Tweet;
 import therealtwitter.Utilisateur;
 
@@ -42,12 +43,12 @@ public class CommandLineUI implements ClientUI {
     }
 
     @Override
-    public Tweet getTweet(Utilisateur user) throws Tweet.TweetTooLongException {
+    public Tweet getTweet(UserInfo user) throws Tweet.TweetTooLongException {
         Scanner reader = new Scanner(System.in);
         System.out.println("Enter a new tweet:");
         String text = reader.nextLine();
         Tweet myTweet = null;
-        myTweet = new Tweet(text,user);
+        myTweet = new Tweet(text,user.getUtilisateur());
         return myTweet;
     }
 

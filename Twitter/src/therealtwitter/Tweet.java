@@ -1,10 +1,12 @@
 package therealtwitter;
 
+import java.util.LinkedList;
+
 public class Tweet {
     String text;
-    Utilisateur author;
+    String author;
 
-    public Tweet(String text, Utilisateur author) throws TweetTooLongException {
+    public Tweet(String text, String author) throws TweetTooLongException {
         if(text.length()>280){
             throw new TweetTooLongException();
         } else{
@@ -12,6 +14,17 @@ public class Tweet {
             this.author = author;
         }
     }
+
+    public Tweet(String text, Utilisateur author) throws TweetTooLongException {
+        if(text.length()>280){
+            throw new TweetTooLongException();
+        } else{
+            this.text = text;
+            this.author = author.getUsername();
+        }
+    }
+
+
 
     void EditTweet(String newText) throws TweetTooLongException {
         if(text.length()>280){
@@ -24,7 +37,7 @@ public class Tweet {
     public String getText(){
         return this.text;
     }
-    public Utilisateur getAuthor(){
+    public String getAuthor(){
         return this.author;
     }
 
@@ -38,10 +51,18 @@ public class Tweet {
      */
     @Override
     public String toString() {
-        String tweet = "Twittos : " + getAuthor().getUsername() + " à twitté :" + getText() +" \n";
+        String tweet = "Twittos : " + getAuthor() + " à twitté :" + getText() +" \n";
 
         System.out.println(tweet);
         return tweet;
+    }
+
+    public static LinkedList<Tweet> toTweets(String list, String author) throws TweetTooLongException {
+        LinkedList<Tweet> tweets = new LinkedList<>();
+        for(String s: list.split(";\n")){
+            tweets.add(new Tweet(s, author));
+        }
+        return tweets;
     }
 
 }

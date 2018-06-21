@@ -6,12 +6,16 @@ import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
 import org.omg.CosNaming.NamingContextPackage.CannotProceed;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
+import org.omg.PortableServer.POA;
 import therealtwitter.CORBA.TwitterServiceApp.TwitterService;
 import therealtwitter.CORBA.TwitterServiceApp.TwitterServiceHelper;
 import therealtwitter.Credential;
+import therealtwitter.Serveur.UserInfo;
 import therealtwitter.Tweet;
 import therealtwitter.Utilisateur;
 
+import java.rmi.server.RMIClassLoader;
+import java.util.LinkedList;
 import java.util.Properties;
 
 
@@ -19,9 +23,9 @@ public class ClientORB {
 
     private static ClientUI userInterface;
     public static final String SERVICE_NAME = "TwitterService";
-    private static Utilisateur loggedUser = null;
+    private static UserInfo loggedUser = null;
 
-    public static void main(String[] argv) throws InvalidName, CannotProceed, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound {
+    public static void main(String[] argv) throws InvalidName, CannotProceed, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound, Tweet.TweetTooLongException {
         System.out.println("Hey i'm a client");
         // Paramétrage pour la création de la couche ORB :
         // localisation de l'annuaire d'objet (service nommage)
@@ -41,42 +45,55 @@ public class ClientORB {
         org.omg.CORBA.Object monServiceRef;
         monServiceRef = serviceNommage.resolve_str(SERVICE_NAME);
         TwitterService monService = TwitterServiceHelper.narrow(monServiceRef);
-
-        monService.ping();
+        userInterface.displayInfo(monService.ping());
 
         ClientORB.userInterface = new CommandLineUI();
         while(ClientORB.loggedUser == null){
             Credential credential = userInterface.getCredentials();
-            //TODO: get user
+            double key = monService.connect(credential.getPassword(),credential.getIdentifier());
+            clientConnect(credential, key);
         }
         System.out.println(monService.ping());
-        //TODO try to actually connect
+
         while (true){
             switch (userInterface.promptMenu()){
                 case CONNECT:
-                    userInterface.getCredentials();
-                    //TODO try to connect
+                    Credential credential = userInterface.getCredentials();
+                    double key = monService.connect(credential.getPassword(),credential.getIdentifier());
+                    clientConnect(credential, key);
                     break;
                 case MY_FEED:
-                    //TODO get all tweets
-                    //userInterface.displayTweets(tweets);
+                    String tweets = monService.getFeed(loggedUser.getUtilisateur());
+                    LinkedList<Tweet> converted;
+                    try{
+                    converted = Tweet.toTweets(tweets,loggedUser.getUtilisateur());
+                    userInterface.displayTweets(converted);
+                    }catch (Tweet.TweetTooLongException e){
+                        userInterface.displayErrorMessage("One of the fetched tweets is too long");
+                    }
                     break;
                 case ABOUT_ME:
-                    //TODO: get userinfo
-                    userInterface.displayInfo("");
+                    String info = monService.getUserInfo(loggedUser.getUtilisateur());
+                    userInterface.displayInfo(info);
                     break;
                 case SEND_TWEET:
                     try {
                         Tweet tweet = userInterface.getTweet(loggedUser);
-                        //TODO: send the tweet
+                        monService.postTweet(tweet.getText(), tweet.getAuthor(), loggedUser.getPrivateKey());
                     } catch (Tweet.TweetTooLongException e) {
                         e.printStackTrace();
                         userInterface.displayErrorMessage("Merci de réduire la taille de votre tweet");
                     }
                     break;
                 case USER_FEED:
-                    //TODO: get a user's tweets
-                    //userInterface.displayTweets(tweets);
+                    String user = userInterface.promptUsername();
+                    String feed = monService.getFeed(user);
+                    try {
+                    LinkedList<Tweet> convertedFeed = Tweet.toTweets(feed, user);
+                    userInterface.displayTweets(convertedFeed);
+                    }catch (Tweet.TweetTooLongException e){
+                        userInterface.displayErrorMessage("One of the fetched tweets is too long");
+                    }
                     break;
                 case ABOUT_USER:
                     String username = userInterface.promptUsername();
@@ -86,6 +103,17 @@ public class ClientORB {
                 default:
                     System.err.println("Entrée non reconnue");
             }
+        }
+    }
+
+    private static void clientConnect(Credential credential, double key) {
+        if(key == (double) -1) {
+            userInterface.displayErrorMessage("Username or password doesn't match");
+        }else if(key == (double) -2){
+            userInterface.displayErrorMessage("Network error");
+        }else{
+            loggedUser = new UserInfo(credential.getIdentifier(),key);
+            userInterface.displayInfo("Connexion success");
         }
     }
 }

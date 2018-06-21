@@ -2,14 +2,16 @@ module TwitterServiceApp{
     typedef string Username;
     typedef string Password;
     typedef string TweetText;
+    typedef double PrivateKey;
+    typedef string SecondUser;
 
     interface TwitterService{
         string ping();
-        string getMyInfo();
         string getUserInfo(in Username username);
-        string postTweet(in TweetText tweetText);
-        string getFeed();
-        string connect(in Password password, in Username username);
+        string postTweet(in TweetText tweetText, in Username username, in PrivateKey privateKey);
+        string getFeed(in Username username);
+        double connect(in Password password, in Username username);
+        string follow(in Username username, in PrivateKey privateKey, in SecondUser secondUser);
         oneway void shutdown();
     };
 };

@@ -73,7 +73,7 @@ public class Utilisateur implements Serializable {
         new ClientRMI();
         if(this.equals(t.author)){
 
-            ClientRMI.getservice().createNewTweet(t.getAuthor().getUsername(),t.getText());
+            ClientRMI.getservice().createNewTweet(t.getAuthor(),t.getText());
         }
     }
 
@@ -153,6 +153,11 @@ public class Utilisateur implements Serializable {
     public void stopFollowing(Utilisateur desabonne,Utilisateur user) throws RemoteException, NotBoundException, MalformedURLException {
         new ClientRMI();
         ClientRMI.getservice().stopFollowing(desabonne.getUsername(),user.getUsername());
+    }
+    @Override
+    public boolean equals(Object o) {
+        if(((Utilisateur)o).getUsername().equals(this.getUsername())) return true;
+        return false;
     }
 
     }

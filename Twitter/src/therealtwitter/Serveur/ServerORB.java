@@ -19,12 +19,15 @@ import therealtwitter.CORBA.TwitterServiceApp.TwitterServiceHelper;
 import therealtwitter.CORBA.TwitterServiceApp.TwitterServicePOA;
 import therealtwitter.Client.ClientRMI;
 
+import java.rmi.RemoteException;
+import java.util.LinkedList;
 import java.util.Properties;
-// type "orbd -ORBInitialPort 1337 -ORBInitialHost 120.0.1"
+// type "orbd -ORBInitialPort 2000 -ORBInitialHost 120.0.1"
 class TwitterImpl extends TwitterServicePOA {
     private static TwitterDBService RMIService;
-
     private ORB orb;
+    private static LinkedList<UserInfo> loggedList = new LinkedList<>();
+
 
     public void setORB(ORB orb_val) {
         orb = orb_val;
@@ -41,33 +44,94 @@ class TwitterImpl extends TwitterServicePOA {
 
     @Override
     public String ping() {
+        System.out.println("Ping\n");
         return "Pong\n";
     }
 
     @Override
-    public String getMyInfo() {
-        //return RMIService.getUsersFollowing(ServerORB.);
-        return "kek";
-    }
-
-    @Override
     public String getUserInfo(String username) {
-        return null;
+        String message="";
+        try {
+            message+="User "+username+"\nFollowing:\n"+RMIService.getUsersFollowedBy(username)+"\nFollowed by:\n"+RMIService.getUsersFollowing(username);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            message+="Could not get user info";
+        }
+        return message;
     }
 
     @Override
-    public String postTweet(String tweetText) {
-        return null;
+    public String postTweet(String tweetText, String username, double privateKey) {
+        if(loggedList.contains(new UserInfo(username, privateKey))){
+            if(tweetText.length()<=240){
+                try {
+                    RMIService.createNewTweet(username, tweetText);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                return "Tweet posté";
+            }
+            return "Tweet trop long";
+        }
+        return "Utilisateur inconnu";
     }
 
     @Override
-    public String getFeed() {
-        return null;
+    public String getFeed(String username) {
+        try {
+            String res ="";
+            for(String s : RMIService.getTweetsOfUser(username)){
+                res+=s+"\n;";
+            }
+            return res;
+
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return "Could not get feed";
+    }
+
+    /**
+     *
+     * @param password
+     * @param username
+     * @return the private key, or -1 if the password and usename doesn't match or -2 if a remote exception happened
+     */
+    @Override
+    public double connect(String password, String username) {
+        try {
+            if(RMIService.isUserPasswordCorrect(username,password)){
+                double key = Math.random();
+                loggedList.add(new UserInfo(username, key));
+                return key;
+            }if(!RMIService.getAllUsers().contains(username)){
+                RMIService.createNewUser(username, password);
+                double key = Math.random();
+                loggedList.add(new UserInfo(username, key));
+                return key;
+            }
+            return -1;
+        } catch (RemoteException e) {
+            return -2;
+        }
     }
 
     @Override
-    public String connect(String password, String username) {
-        return null;
+    public String follow(String username, double privateKey, String secondUser) {
+        if(loggedList.contains(new UserInfo(username, privateKey))){
+            if(username!=secondUser){
+                try {
+                    RMIService.startFollowing(username, secondUser);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                    return "Network error";
+                }
+                return "You can't follow yourself";
+            }
+            return "Please log in before doing that";
+
+        }
+        return "Could not follow user";
     }
 
     // implement shutdown() method
@@ -105,7 +169,7 @@ public class ServerORB {
         monServiceRef = rootPoa.servant_to_reference(i);
         TwitterService monService = TwitterServiceHelper.narrow(monServiceRef);
         NameComponent[] path = serviceNommage.to_name(SERVICE_NAME);
-        serviceNommage.bind(path, monService);
+        serviceNommage.rebind(path, monService);
         orb.run();
     }
 }
