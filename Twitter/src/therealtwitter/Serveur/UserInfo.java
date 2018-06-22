@@ -27,12 +27,16 @@ public class UserInfo {
 
     /**
      * Admire the most beautiful equals method ever
+     * give a string to do equals on the username ad a userinfo to get it on the username and key
      * @param o
      * @return
      */
     @Override
     public boolean equals(Object o){
-        if(((UserInfo)o).getUtilisateur().equals(this.getUtilisateur())&&((UserInfo)o).getPrivateKey()==this.getPrivateKey()) return true;
+        if(o.getClass() == String.class){
+            if(((String)o).equals(this.getUtilisateur())) return true;
+        }else if(((UserInfo)o).getUtilisateur().equals(this.getUtilisateur())
+                &&((UserInfo)o).getPrivateKey()==this.getPrivateKey()) return true;
         return false;
     }
 }

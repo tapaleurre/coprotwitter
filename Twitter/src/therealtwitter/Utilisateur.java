@@ -1,5 +1,6 @@
 package therealtwitter;
 
+import therealtwitter.CORBA.TwitterServiceApp.TwitterService;
 import therealtwitter.Client.ClientRMI;
 
 import java.io.Serializable;

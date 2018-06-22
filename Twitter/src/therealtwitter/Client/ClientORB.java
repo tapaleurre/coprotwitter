@@ -26,11 +26,11 @@ public class ClientORB {
     static TwitterService monService;
     private static UserInfo loggedUser = null;
 
-    public static void main(String[] argv) throws InvalidName, CannotProceed, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound, Tweet.TweetTooLongException {
+    public static synchronized void main(String[] argv) throws InvalidName, CannotProceed, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound, Tweet.TweetTooLongException {
         try{
             Properties props = new Properties();
             props.put("org.omg.CORBA.ORBInitialHost", "127.0.0.1");
-            props.put("org.omg.CORBA.ORBInitialPort", "1337");
+            props.put("org.omg.CORBA.ORBInitialPort", "2000");
             // create and initialize the ORB
             ORB orb = ORB.init(argv, props);
 
@@ -83,12 +83,16 @@ public class ClientORB {
             double key = monService.connect(credential.getPassword(),credential.getIdentifier());
             clientConnect(credential, key);
             System.out.println("key: "+key);
-            loggedUser = new UserInfo(credential.getIdentifier(),key);
+            if(key<=1 && key>=0){
+                ClientORB.loggedUser = new UserInfo(credential.getIdentifier(),key);
+            }
         }
         System.out.println(monService.ping());
 
         while (true){
             UserAction action = userInterface.promptMenu();
+            userInterface.displayInfo(action.name());
+            System.out.println("Choix: "+action.name());
             switch (action){
                 case CONNECT:
                     Credential credential = userInterface.getCredentials();
@@ -96,6 +100,7 @@ public class ClientORB {
                     clientConnect(credential, key);
                     break;
                 case MY_FEED:
+                    userInterface.displayInfo("My feed:\n");
                     String tweets = monService.getFeed(loggedUser.getUtilisateur());
                     LinkedList<Tweet> converted;
                     try{
@@ -112,7 +117,7 @@ public class ClientORB {
                 case SEND_TWEET:
                     try {
                         Tweet tweet = userInterface.getTweet(loggedUser);
-                        monService.postTweet(tweet.getText(), tweet.getAuthor(), loggedUser.getPrivateKey());
+                        userInterface.displayInfo(monService.postTweet(tweet.getText(), tweet.getAuthor(), loggedUser.getPrivateKey()));
                     } catch (Tweet.TweetTooLongException e) {
                         e.printStackTrace();
                         userInterface.displayErrorMessage("Merci de réduire la taille de votre tweet");
@@ -144,7 +149,18 @@ public class ClientORB {
             userInterface.displayErrorMessage("Username or password doesn't match");
         }else if(key == (double) -2){
             userInterface.displayErrorMessage("Network error");
-        }else{
+        }else if(key == (double)-3){
+            userInterface.displayErrorMessage("Cannot check user password");
+        }else if(key == (double)-4){
+            userInterface.displayErrorMessage("Cannot search in list");
+        }else if(key == (double)-5){
+            userInterface.displayErrorMessage("Cannot remove user from list");
+        }else if(key == (double)-6){
+            userInterface.displayErrorMessage("User could not be added");
+        }else if(key == (double)-7){
+            userInterface.displayErrorMessage("User could not be added to the local list");
+    }
+         else   {
             loggedUser = new UserInfo(credential.getIdentifier(),key);
             userInterface.displayInfo("Connexion success");
         }

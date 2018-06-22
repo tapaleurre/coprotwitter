@@ -1,4 +1,4 @@
-package therealtwitter.Serveur;
+/*package therealtwitter.Serveur;
 
 import simo.mi6.project.tier3.TwitterDBService;
 import therealtwitter.Tweet;
@@ -111,3 +111,4 @@ public class ServiceWS {
         return null;
     }
 }
+*/

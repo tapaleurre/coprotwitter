@@ -1,4 +1,4 @@
-package therealtwitter.Client;
+/*package therealtwitter.Client;
 
 import therealtwitter.Credential;
 import therealtwitter.Serveur.UserInfo;
@@ -47,18 +47,16 @@ public class ClientWS {
         JAXBElement<Tweets> tweets;
         Unmarshaller unmarshaller;
 
+		// Instanciation du convertiseur XML => Objet Java
 
-        /*
-		 ** Instanciation du convertiseur XML => Objet Java
-		 */
         context = JAXBContext.newInstance(Tweets.class);
         unmarshaller = context.createUnmarshaller();
 
         reponse = serviceWS.get(String.class);
 
-		/*
-		 ** Traitement de la reponse XML : transformation en une instance de la classe Villes
-		 */
+
+		// Traitement de la reponse XML : transformation en une instance de la classe Villes
+
         xmlStr = new StringBuffer(reponse);
         tweets = unmarshaller.unmarshal(new StreamSource(new StringReader(xmlStr.toString())), Tweets.class);
 
@@ -163,3 +161,4 @@ public class ClientWS {
     }
 
 }
+*/

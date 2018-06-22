@@ -28,9 +28,10 @@ class ConsoleEraser extends Thread {
 }
 
 public class CommandLineUI implements ClientUI {
+    private static Scanner reader = new Scanner(System.in);
+
     @Override
     public Credential getCredentials() {
-        Scanner reader = new Scanner(System.in);
         ConsoleEraser consoleEraser = new ConsoleEraser();
         System.out.println("Please enter your identifier");
         String id = reader.nextLine();
@@ -44,26 +45,22 @@ public class CommandLineUI implements ClientUI {
 
     @Override
     public Tweet getTweet(UserInfo user) throws Tweet.TweetTooLongException {
-        Scanner reader = new Scanner(System.in);
         System.out.println("Enter a new tweet:");
         String text = reader.nextLine();
-        Tweet myTweet = null;
+        Tweet myTweet;
         myTweet = new Tweet(text,user.getUtilisateur());
+        System.out.println(myTweet.getText());
         return myTweet;
     }
 
     @Override
     public UserAction promptMenu() {
-        String text = "";
-        for(UserAction choice : UserAction.values()){
-            Scanner reader = new Scanner(System.in);
-            String selection = "";
-            for (UserAction a : UserAction.values()){
-                selection+=a.ordinal()+" - " + a.name() + "\n";
-            }
-            System.out.println(selection);
-            text = reader.nextLine();
+        String selection = "";
+        for (UserAction a : UserAction.values()){
+            selection+=a.ordinal()+" - " + a.name() + "\n";
         }
+        System.out.println(selection);
+        String text = reader.nextLine();
         UserAction result;
         result = UserAction.values()[Integer.parseInt(text)];
         //TODO: foolproof
@@ -84,7 +81,6 @@ public class CommandLineUI implements ClientUI {
     @Override
     public String promptUsername() {
         System.out.println("Merci d'entrer un nom d'utilisateur:");
-        Scanner reader = new Scanner(System.in);
         return reader.nextLine();
     }
 
@@ -98,7 +94,6 @@ public class CommandLineUI implements ClientUI {
         System.out.println("Pour suivre l'utilisateur tapez \"follow\"");
         System.out.println("Pour arrêter de suivre l'utilisateur tapez \"unfollow\"");
         System.out.println("Pour annuler appuyez sur entrée");
-        Scanner reader = new Scanner(System.in);
         String entry;
         do{
             entry = reader.nextLine();

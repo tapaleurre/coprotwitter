@@ -18,19 +18,17 @@ public class ClientRMI  {
     }
     public ClientRMI() throws RemoteException, NotBoundException, MalformedURLException {
         try {
-            ClientRMI.service = (TwitterDBService) Naming.lookup("rmi://86.76.4.24:3200/TwitterDBService");
+            this.service = (TwitterDBService) Naming.lookup("rmi://86.76.4.24:3200/TwitterDBService");
         } catch (ConnectException e) {
             System.out.println("Aucun service information trouvé");
             return;
         }
     }
     public static void main(String[] args) throws  Exception{
-        new ClientRMI();
-        List users = service.getAllUsers();
+        ClientRMI clientRMI = new ClientRMI();
+        List users = clientRMI.getservice().getAllUsers();
         for(int i=0; i<users.size(); i++)
             System.out.println(users.get(i));
-
-
     }
     }
 
