@@ -3,7 +3,6 @@ package therealtwitter.Client;
 import therealtwitter.Credential;
 import therealtwitter.Serveur.UserInfo;
 import therealtwitter.Tweet;
-import therealtwitter.Utilisateur;
 
 import java.util.List;
 import java.util.Scanner;
@@ -32,7 +31,7 @@ public class CommandLineUI implements ClientUI {
 
     @Override
     public Credential getCredentials() {
-        ConsoleEraser consoleEraser = new ConsoleEraser();
+        //ConsoleEraser consoleEraser = new ConsoleEraser();
         System.out.println("Please enter your identifier");
         String id = reader.nextLine();
         System.out.println("Please enter your password");
@@ -62,7 +61,11 @@ public class CommandLineUI implements ClientUI {
         System.out.println(selection);
         String text = reader.nextLine();
         UserAction result;
-        result = UserAction.values()[Integer.parseInt(text)];
+        try {
+            result = UserAction.values()[Integer.parseInt(text)];
+        }catch (Exception e){
+            return UserAction.ABOUT_ME;
+        }
         //TODO: foolproof
         return result;
     }
@@ -76,6 +79,14 @@ public class CommandLineUI implements ClientUI {
             text+="==========\n";
         }
         System.out.println(text);
+    }
+
+    @Override
+    public void displayUsers(List<String> users) {
+        System.out.println("==== Utilisateurs ====");
+        for(String s:users){
+            System.out.println(s);
+        }
     }
 
     @Override
@@ -97,8 +108,8 @@ public class CommandLineUI implements ClientUI {
         String entry;
         do{
             entry = reader.nextLine();
-        }while (!entry.equals("follow")||!entry.equals("unfollow")||!entry.equals(""));
-        return reader.nextLine();
+        }while (!entry.equals("follow")&&!entry.equals("unfollow")&&!entry.equals(""));
+        return entry;
     }
 
 

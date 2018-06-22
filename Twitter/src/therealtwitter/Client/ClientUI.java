@@ -19,6 +19,7 @@ public interface ClientUI {
     void displayInfo(String s);
     void displayErrorMessage(String s);
     void displayTweets(List<Tweet> tweets);
+    void displayUsers(List<String> users);
     String promptUsername();
     String followUnfollowUser(String username,Boolean isFollowing);
 }

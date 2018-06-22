@@ -61,7 +61,7 @@ public class Tweet {
 
     public static LinkedList<Tweet> toTweets(String list, String author) throws TweetTooLongException {
         LinkedList<Tweet> tweets = new LinkedList<>();
-        for(String s: list.split(";\n")){
+        for(String s: list.split(";_;_;")){
             tweets.add(new Tweet(s, author));
         }
         return tweets;

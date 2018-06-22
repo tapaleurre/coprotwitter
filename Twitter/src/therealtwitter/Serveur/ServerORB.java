@@ -97,7 +97,7 @@ class TwitterImpl extends TwitterServicePOA {
         try {
             String res ="";
             for(String s : RMIService.getTweetsOfUser(username)){
-                res+=s+"\n;";
+                res+=s+";_;_;";
             }
             return res;
 
@@ -187,11 +187,50 @@ class TwitterImpl extends TwitterServicePOA {
                     e.printStackTrace();
                     return "Network error";
                 }
-                return "You can't follow yourself";
+                return "You now follow "+secondUser;
             }
-            return "Please log in before doing that";
+            return "You can't follow yourself";
         }
-        return "Could not follow user";
+        return "Please log in before doing that";
+    }
+
+    @Override
+    public String unfollow(String username, double privateKey, String secondUser) {
+        if(loggedList.contains(new UserInfo(username, privateKey))){
+            if(username!=secondUser){
+                try {
+                    RMIService.stopFollowing(username, secondUser);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                    return "Network error";
+                }
+                return "You now unfollow "+secondUser;
+            }
+            return "You can't unfollow yourself";
+        }
+        return "Please log in before doing that";
+    }
+
+    /**
+     *
+     * @param username
+     * @param secondUser
+     * @return true if username is follwing seconduser
+     */
+    @Override
+    public boolean isFollowing(String username, String secondUser) {
+        try {
+            System.out.println(RMIService.getUsersFollowing(secondUser));
+            if(RMIService.getUsersFollowing(secondUser).contains(username)) return true;
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public String getAllUsers() {
+        return null;
     }
 
     // implement shutdown() method

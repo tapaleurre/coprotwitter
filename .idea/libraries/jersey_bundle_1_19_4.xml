@@ -1,9 +1,10 @@
 <component name="libraryTable">
   <library name="jersey-bundle-1.19.4">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/jersey-bundle-1.19.4.jar!/" />
+      <root url="file://$PROJECT_DIR$/lib" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib" recursive="false" />
   </library>
 </component>

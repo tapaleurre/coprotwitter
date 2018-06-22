@@ -1,6 +1,5 @@
 <component name="libraryTable">
-  <library name="javax.ws.rs:jsr311-api:1.1.1" type="repository">
-    <properties maven-id="javax.ws.rs:jsr311-api:1.1.1" />
+  <library name="jsr311-api-1.1.1">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/jsr311-api-1.1.1.jar!/" />
     </CLASSES>

@@ -1,20 +1,13 @@
 package therealtwitter.Client;
 
 import org.omg.CORBA.ORB;
-import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
-import org.omg.CosNaming.NamingContextPackage.CannotProceed;
-import org.omg.CosNaming.NamingContextPackage.NotFound;
-import org.omg.PortableServer.POA;
 import therealtwitter.CORBA.TwitterServiceApp.TwitterService;
 import therealtwitter.CORBA.TwitterServiceApp.TwitterServiceHelper;
 import therealtwitter.Credential;
 import therealtwitter.Serveur.UserInfo;
 import therealtwitter.Tweet;
-import therealtwitter.Utilisateur;
-
-import java.rmi.server.RMIClassLoader;
 import java.util.LinkedList;
 import java.util.Properties;
 
@@ -26,7 +19,7 @@ public class ClientORB {
     static TwitterService monService;
     private static UserInfo loggedUser = null;
 
-    public static synchronized void main(String[] argv) throws InvalidName, CannotProceed, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound, Tweet.TweetTooLongException {
+    public static synchronized void main(String[] argv) {
         try{
             Properties props = new Properties();
             props.put("org.omg.CORBA.ORBInitialHost", "127.0.0.1");
@@ -113,6 +106,17 @@ public class ClientORB {
                     String username = userInterface.promptUsername();
                     String userInfo = monService.getUserInfo(username);
                     userInterface.displayInfo(userInfo);
+                    break;
+                case FOLLOW_UNFOLLOW:
+                    username = userInterface.promptUsername();
+                    String result = userInterface.followUnfollowUser(username, monService.isFollowing(loggedUser.getUtilisateur(), username));
+                    if(result.equals("follow")){
+                        userInterface.displayInfo(monService.follow(loggedUser.getUtilisateur(), loggedUser.getPrivateKey(), username));
+                    }else if(result.equals("unfollow")){
+                        userInterface.displayInfo(monService.unfollow(loggedUser.getUtilisateur(), loggedUser.getPrivateKey(), username));
+                    }else {
+                        userInterface.displayInfo("Annulation");
+                    }
                     break;
                 default:
                     System.err.println("Entrée non reconnue");

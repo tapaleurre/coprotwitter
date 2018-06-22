@@ -1,4 +1,4 @@
-package therealtwitter.Client;
+/*package therealtwitter.Client;
 
 import therealtwitter.Credential;
 import therealtwitter.Serveur.UserInfo;
@@ -156,4 +156,4 @@ public class ClientWS {
         }
     }
 
-}
+}*/

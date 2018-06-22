@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="Twitter:war exploded">
-    <output-path>$PROJECT_DIR$/Twitter/out/artifacts/Twitter_war_exploded</output-path>
+    <output-path />
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -11,6 +11,7 @@
           <element id="file-copy" path="$PROJECT_DIR$/Twitter/lib/jsr311-api-1.1.jar" />
           <element id="library" level="project" name="jersey-bundle-1.19.4" />
           <element id="library" level="project" name="jsr311-api-1.1.1" />
+          <element id="library" level="project" name="Java EE 6-Java EE 6" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="Twitter/web/Web" />

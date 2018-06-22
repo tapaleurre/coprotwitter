@@ -12,6 +12,9 @@ module TwitterServiceApp{
         string getFeed(in Username username);
         double connect(in Password password, in Username username);
         string follow(in Username username, in PrivateKey privateKey, in SecondUser secondUser);
+        string unfollow(in Username username, in PrivateKey privateKey, in SecondUser secondUser);
+        boolean isFollowing(in Username username, in SecondUser secondUser);
+        string getAllUsers();
         oneway void shutdown();
     };
 };
