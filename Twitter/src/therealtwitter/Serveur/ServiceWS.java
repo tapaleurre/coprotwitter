@@ -2,15 +2,19 @@ package therealtwitter.Serveur;
 
 import simo.mi6.project.tier3.TwitterDBService;
 import therealtwitter.Tweet;
+import therealtwitter.Tweets;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBElement;
+import java.rmi.RemoteException;
+import java.util.LinkedList;
 
 
-@Path("/TwitterService/")
+@Path("TwitterService/")
 public class ServiceWS {
-    private TwitterDBService serviceRMI;
+    private static TwitterDBService serviceRMI;
+    private static LinkedList<UserInfo> loggedList = new LinkedList<>();
 
     @GET
     @Path("getTweets/{user}")
@@ -67,19 +71,48 @@ public class ServiceWS {
 
 
     @GET
-    @Path("twitterFeed")
-    @Produces(MediaType.APPLICATION_XML)
-    public String getFeed() {
-        return null;
-    }
+    @Path("twitterFeed/{user}")
+    @Consumes("text/plain")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Tweets getFeed(@PathParam("user")String username) {
+        Tweet res;
+        Tweets list_tweets = new Tweets();
+        try {
+            try{
+                for (String s : serviceRMI.getTweetsOfUser(username)) {
+                    res = new Tweet(s, username);
+                    list_tweets.liste.add(res);
+                }
+            }catch (Tweet.TweetTooLongException ex){
+                ex.printStackTrace();
+            }
 
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return list_tweets;
+    }
 
     @GET
     @Path("connect/{user}&{password}")
     @Consumes("text/plain")
     @Produces("text/plain") //Private Key
     public String connect(@PathParam("password")String password, @PathParam("user")String username) {
-        return null;
+        try{
+            if(serviceRMI.isUserPasswordCorrect(username,password)){
+                Double key = Math.random();
+                loggedList.add(new UserInfo(username, key));
+                return String.valueOf(key);
+            }if(!serviceRMI.getAllUsers().contains(username)){
+                serviceRMI.createNewUser(username, password);
+                double key = Math.random();
+                loggedList.add(new UserInfo(username, key));
+                return String.valueOf(key);
+            }
+            return "-1";
+        } catch (RemoteException e) {
+            return "-2";
+        }
     }
 
     @GET

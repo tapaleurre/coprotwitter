@@ -1,6 +1,7 @@
 package therealtwitter.Client;
 
 import therealtwitter.Credential;
+import therealtwitter.Serveur.UserInfo;
 import therealtwitter.Tweet;
 import therealtwitter.Tweets;
 import therealtwitter.Utilisateur;
@@ -16,7 +17,7 @@ import java.io.StringReader;
 
 public class ClientWS {
     private static ClientUI userInterface;
-    private static Utilisateur loggedUser = null;
+    private static UserInfo loggedUser = null;
     private static WebResource serviceWS = null;
 
     private static String sayHello(){
@@ -38,7 +39,7 @@ public class ClientWS {
     }
 
 
-    private static Tweets getFeed() throws Exception{
+    private static Tweets getFeed(String username) throws Exception{
 
         String reponse;
         StringBuffer xmlStr;
@@ -73,6 +74,18 @@ public class ClientWS {
         return serviceWS.path("disconnect/"+utilisateur).get(String.class);
     }
 
+
+    private static void clientConnect(Credential credential, double key) {
+        if(key == (double) -1) {
+            userInterface.displayErrorMessage("Username or password doesn't match");
+        }else if(key == (double) -2){
+            userInterface.displayErrorMessage("Network error");
+        }else{
+            loggedUser = new UserInfo(credential.getIdentifier(),key);
+            userInterface.displayInfo("Connexion success");
+        }
+    }
+
     public static void main(String[] argv) throws org.omg.CosNaming.NamingContextPackage.InvalidName {
 
         System.out.println("Hey i'm a client");
@@ -81,7 +94,10 @@ public class ClientWS {
         ClientWS.userInterface = new CommandLineUI();
         while(ClientWS.loggedUser == null){
             Credential credential = userInterface.getCredentials();
-            //TODO: get user
+            double key = Double.valueOf(ClientWS.connect(credential.getPassword(),credential.getIdentifier())) ;
+            clientConnect(credential, key);
+            System.out.println("key: "+key);
+            loggedUser = new UserInfo(credential.getIdentifier(),key);
         }
         System.out.println(ClientWS.ping());
         //TODO try to actually connect
@@ -94,27 +110,44 @@ public class ClientWS {
                     break;
 
                 case MY_FEED:
-                    //TODO get all tweets
-                    userInterface.displayTweets(null);
+                    try{
+                        Tweets list_tweets = ClientWS.getFeed(loggedUser.getUtilisateur());
+                        if(list_tweets.liste.isEmpty()){
+                            userInterface.displayInfo("Aucun tweets trouvés");
+                        }else{
+                            userInterface.displayTweets(list_tweets.liste);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                     break;
 
                 case ABOUT_ME:
-                    credential = userInterface.getCredentials();
-                    String about_me = ClientWS.getUserInfo(credential.getIdentifier());
-                    userInterface.displayInfo("About yourself :\n"+about_me);
+                    String about_me = ClientWS.getUserInfo(loggedUser.getUtilisateur());
+                    userInterface.displayInfo("Mes infos :\n"+about_me);
                     break;
                 case SEND_TWEET:
                     try {
-                        Tweet tweet = userInterface.getTweet(null);
-                        ClientWS.postTweet(null);
+                        Tweet tweet = userInterface.getTweet(loggedUser);
+                        response = ClientWS.postTweet(tweet);
+                        userInterface.displayInfo(response);
                     } catch (Tweet.TweetTooLongException e) {
                         e.printStackTrace();
                         userInterface.displayErrorMessage("Merci de réduire la taille de votre tweet");
                     }
                     break;
                 case USER_FEED:
-                    //TODO: get a user's tweets
-                    //userInterface.displayTweets(tweets);
+                    try{
+                        String username = userInterface.promptUsername();
+                        Tweets list_tweets = ClientWS.getFeed(username);
+                        if(list_tweets.liste.isEmpty()){
+                            userInterface.displayInfo("Aucun tweets trouvés");
+                        }else{
+                            userInterface.displayTweets(list_tweets.liste);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                     break;
                 case ABOUT_USER:
                     String username = userInterface.promptUsername();
@@ -126,4 +159,5 @@ public class ClientWS {
             }
         }
     }
+
 }
