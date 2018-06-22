@@ -7,8 +7,7 @@ public enum UserAction {
     ABOUT_ME("Mon profil"),
     MY_FEED("Mon feed"),
     USER_FEED("Posts par utilisateur"),
-    FOLLOW("Suivre"),
-    UNFOLLOW("Ne plus suivre");
+    FOLLOW_UNFOLLOW("Suivre/ Ne plus suivre");
 
     private final String text;
 
