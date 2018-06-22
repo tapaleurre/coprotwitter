@@ -1,11 +1,9 @@
-/*package therealtwitter.Client;
+package therealtwitter.Client;
 
 import therealtwitter.Credential;
 import therealtwitter.Serveur.UserInfo;
 import therealtwitter.Tweet;
 import therealtwitter.Tweets;
-import therealtwitter.Utilisateur;
-import java.util.List;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import javax.xml.bind.Unmarshaller;
@@ -34,8 +32,8 @@ public class ClientWS {
     }
 
 
-    private static String postTweet(Tweet tweet){
-        return serviceWS.path("postTweet").put(String.class,tweet);
+    private static String postTweet(String tweetText, String username, double key){
+        return serviceWS.path("postTweet/"+tweetText+"&"+username+"&"+String.valueOf(key)).get(String.class);
     }
 
 
@@ -47,16 +45,13 @@ public class ClientWS {
         JAXBElement<Tweets> tweets;
         Unmarshaller unmarshaller;
 
-		// Instanciation du convertiseur XML => Objet Java
-
+        //Instanciation du convertiseur XML => Objet Java
         context = JAXBContext.newInstance(Tweets.class);
         unmarshaller = context.createUnmarshaller();
 
-        reponse = serviceWS.get(String.class);
+        reponse = serviceWS.path("twitterFeed/"+username).get(String.class);
 
-
-		// Traitement de la reponse XML : transformation en une instance de la classe Villes
-
+		//Traitement de la reponse XML : transformation en une instance de la classe Tweets
         xmlStr = new StringBuffer(reponse);
         tweets = unmarshaller.unmarshal(new StreamSource(new StringReader(xmlStr.toString())), Tweets.class);
 
@@ -75,12 +70,12 @@ public class ClientWS {
 
     private static void clientConnect(Credential credential, double key) {
         if(key == (double) -1) {
-            userInterface.displayErrorMessage("Username or password doesn't match");
+            userInterface.displayErrorMessage("Nom d'utilisateur ou mot de passe incorrecte");
         }else if(key == (double) -2){
-            userInterface.displayErrorMessage("Network error");
+            userInterface.displayErrorMessage("Erreur réseau");
         }else{
             loggedUser = new UserInfo(credential.getIdentifier(),key);
-            userInterface.displayInfo("Connexion success");
+            userInterface.displayInfo("Connexion réussite");
         }
     }
 
@@ -98,8 +93,6 @@ public class ClientWS {
             loggedUser = new UserInfo(credential.getIdentifier(),key);
         }
         System.out.println(ClientWS.ping());
-
-        //TODO try to actually connect
 
         while (true){
             switch (userInterface.promptMenu()){
@@ -129,7 +122,7 @@ public class ClientWS {
                 case SEND_TWEET:
                     try {
                         Tweet tweet = userInterface.getTweet(loggedUser);
-                        response = ClientWS.postTweet(tweet);
+                        response = ClientWS.postTweet(tweet.getText(), tweet.getAuthor(), loggedUser.getPrivateKey());
                         userInterface.displayInfo(response);
                     } catch (Tweet.TweetTooLongException e) {
                         e.printStackTrace();
@@ -161,4 +154,3 @@ public class ClientWS {
     }
 
 }
-*/
