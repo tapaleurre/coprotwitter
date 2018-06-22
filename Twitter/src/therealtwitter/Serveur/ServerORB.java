@@ -76,6 +76,7 @@ class TwitterImpl extends TwitterServicePOA {
             System.out.println("@"+i.getUtilisateur()+" key: "+i.getPrivateKey()+"\n");
         }
         System.out.println(username+" key: "+privateKey+"\n");
+        System.out.println(loggedList.get(0).equals(new UserInfo(username, privateKey)));
         if(loggedList.contains(new UserInfo(username, privateKey))){
             if(tweetText.length()<=240){
                 try {
@@ -203,7 +204,7 @@ public class ServerORB {
 
     public static final String SERVICE_NAME = "TwitterService";
 
-    public static void main(String[] argv) throws InvalidName, AdapterInactive, ServantNotActive, WrongPolicy, org.omg.CosNaming.NamingContextPackage.InvalidName, CannotProceed, NotFound {
+    public static void main(String[] argv){
         try{
             Properties props = new Properties();
             props.put("org.omg.CORBA.ORBInitialHost", "127.0.0.1");

@@ -36,7 +36,7 @@ public class UserInfo {
         if(o.getClass() == String.class){
             if(((String)o).equals(this.getUtilisateur())) return true;
         }else if(((UserInfo)o).getUtilisateur().equals(this.getUtilisateur())
-                &&((UserInfo)o).getPrivateKey()==this.getPrivateKey()) return true;
+                &&((UserInfo)o).getPrivateKey().equals(this.getPrivateKey())) return true;
         return false;
     }
 }
