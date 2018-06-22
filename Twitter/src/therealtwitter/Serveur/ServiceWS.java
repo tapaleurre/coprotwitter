@@ -149,45 +149,64 @@ public class ServiceWS {
     @Path("follow/{firstUser}&{privateKey}&{secondUser}")
     @Consumes({"text/plain","text/plain", "text/plain"})
     @Produces("text/plain")
-    public String follow(String username, String privateKey, String secondUser) {
+    public String follow(@PathParam("firstUser")String username, @PathParam("privateKey")String privateKey, @PathParam("secondUser")String secondUser){
         double key = Double.valueOf(privateKey);
 
         if(loggedList.contains(new UserInfo(username, key))){
             if(username!=secondUser){
                 try {
                     serviceRMI.startFollowing(username, secondUser);
+                    return "Abonnement réussit";
                 } catch (RemoteException e) {
                     e.printStackTrace();
                     return "Erreur réseau";
                 }
-                return "Vous ne pouvez pas vous suivre vous-même";
             }
-            return "Veuillez vous connecter en premier";
+            return "Vous ne pouvez pas vous suivre vous-même";
 
         }
-        return "Impossible de suivre l'utilisateur";
+        return "Veuillez vous connecter en premier";
     }
 
     @GET
     @Path("unfollow/{firstUser}&{privateKey}&{secondUser}")
     @Consumes({"text/plain","text/plain", "text/plain"})
     @Produces("text/plain")
-    public String unfollow(String username, String privateKey, String secondUser) {
+    public String unfollow(@PathParam("firstUser")String username, @PathParam("privateKey")String privateKey, @PathParam("secondUser")String secondUser) {
         double key = Double.valueOf(privateKey);
 
         if(loggedList.contains(new UserInfo(username, key))){
             if(username!=secondUser){
                 try {
                     serviceRMI.stopFollowing(username, secondUser);
+                    return "Désabonnement réussit";
                 } catch (RemoteException e) {
                     e.printStackTrace();
                     return "Erreur réseau";
                 }
-                return "Vous ne pouvez pas arrêter de vous suivre vous-même";
             }
-            return "Veuillez vous connecter en premier";
-
+            return "Vous ne pouvez pas arrêter de vous suivre vous-même";
         }
-        return "Impossible d'arrêter de suivre l'utilisateur";
+        return "Veuillez vous connecter en premier";
+    }
+
+    @GET
+    @Path("isFollowing/{user}&{userToFollow}")
+    @Consumes({"text/plain","text/plain"})
+    @Produces("text/plain")
+    public String isFollowing(@PathParam("user")String username,@PathParam("userToFollow")String userToFollow){
+        try {
+            boolean following = serviceRMI.getUsersFollowing(username).contains(userToFollow);
+            String res;
+            if(following){
+                res = "oui";
+            }else{
+                res = "non";
+            }
+            return res;
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return "erreur";
     }
 }

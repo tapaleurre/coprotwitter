@@ -1,4 +1,4 @@
-/*package therealtwitter.Client;
+package therealtwitter.Client;
 
 import therealtwitter.Credential;
 import therealtwitter.Serveur.UserInfo;
@@ -11,6 +11,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.transform.stream.StreamSource;
 import java.io.StringReader;
+import java.rmi.RemoteException;
 
 
 public class ClientWS {
@@ -79,6 +80,28 @@ public class ClientWS {
         }
     }
 
+    private static boolean isFollowing(String username,String userToFollow) {
+        String res = serviceWS.path("userInfo/"+username).get(String.class);
+        if(res.equals("oui")){
+            return true;
+        }else if(res.equals("non")){
+            return false;
+        }else {
+            userInterface.displayErrorMessage("Une erreur est survenu : utilisateur incorrecte");
+            return true;
+        }
+    }
+
+    private static String follow(String username, double privateKey, String secondUser){
+        String key = String.valueOf(privateKey);
+        return serviceWS.path("follow/"+username+"&"+key+"&"+secondUser).get(String.class);
+    }
+
+    private static String unfollow(String username, double privateKey, String secondUser){
+        String key = String.valueOf(privateKey);
+        return serviceWS.path("unfollow/"+username+"&"+key+"&"+secondUser).get(String.class);
+    }
+
     public static void main(String[] argv) throws org.omg.CosNaming.NamingContextPackage.InvalidName {
 
         System.out.println("Hey i'm a client");
@@ -97,7 +120,14 @@ public class ClientWS {
         while (true){
             switch (userInterface.promptMenu()){
                 case FOLLOW_UNFOLLOW:
-                    
+                    String userToFollow = userInterface.promptUsername();
+                    boolean following = ClientWS.isFollowing(loggedUser.getUtilisateur(),userToFollow);
+                    String userRes = userInterface.followUnfollowUser(userToFollow,following);
+                    if(userRes.equals("follow")){
+                        ClientWS.follow(loggedUser.getUtilisateur(),loggedUser.getPrivateKey(),userToFollow);
+                    }else if(userRes.equals("unfollow")){
+                        ClientWS.unfollow(loggedUser.getUtilisateur(),loggedUser.getPrivateKey(),userToFollow);
+                    }
                     break;
                 case CONNECT:
                     Credential credential = userInterface.getCredentials();
@@ -156,4 +186,4 @@ public class ClientWS {
         }
     }
 
-}*/
+}
