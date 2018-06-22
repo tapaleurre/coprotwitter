@@ -118,6 +118,14 @@ public class ClientORB {
                         userInterface.displayInfo("Annulation");
                     }
                     break;
+                case DISPLAY_USERS:
+                    String usersString = monService.getAllUsers();
+                    LinkedList<String> strings = new LinkedList<>();
+                    for(String s: usersString.split(";_;_;")){
+                        strings.add(s);
+                    }
+                    userInterface.displayUsers(strings);
+                    break;
                 default:
                     System.err.println("Entrée non reconnue");
             }

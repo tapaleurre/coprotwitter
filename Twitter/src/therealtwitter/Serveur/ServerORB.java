@@ -230,7 +230,15 @@ class TwitterImpl extends TwitterServicePOA {
 
     @Override
     public String getAllUsers() {
-        return null;
+        String res="";
+        try {
+            for (String s:RMIService.getAllUsers()){
+                res+=s+";_;_;";
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 
     // implement shutdown() method

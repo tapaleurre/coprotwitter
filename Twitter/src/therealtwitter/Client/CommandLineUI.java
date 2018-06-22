@@ -66,7 +66,6 @@ public class CommandLineUI implements ClientUI {
         }catch (Exception e){
             return UserAction.ABOUT_ME;
         }
-        //TODO: foolproof
         return result;
     }
 
