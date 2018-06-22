@@ -1,7 +1,9 @@
 package therealtwitter;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.LinkedList;
 
+@XmlRootElement(name = "Tweet")
 public class Tweet {
     String text;
     String author;
