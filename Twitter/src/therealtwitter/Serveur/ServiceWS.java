@@ -17,23 +17,6 @@ public class ServiceWS {
     private static LinkedList<UserInfo> loggedList = new LinkedList<>();
 
     @GET
-    @Path("getTweets/{user}")
-    @Produces(MediaType.APPLICATION_XML)
-    public JAXBElement<Tweet> getTweetsUtilisateur (@PathParam("user")String utilisateur){
-
-        return null;
-    }
-
-    @GET
-    @Path("getTweets/")
-    @Consumes(MediaType.APPLICATION_XML)
-    @Produces(MediaType.APPLICATION_XML)
-    public JAXBElement<Tweet> getTweetsAbonnement (JAXBElement<Tweet> listUtilisateurs){
-
-        return null;
-    }
-
-    @GET
     @Path("helloWorld")
     @Produces("text/plain")
     public String sayHello() {
@@ -49,15 +32,14 @@ public class ServiceWS {
     }
 
 
-    public String getMyInfo() {
-        return null;
-    }
-
     @GET
     @Path("userInfo/{user}")
     @Consumes("text/plain")
     @Produces("text/plain")
     public String getUserInfo(String username) {
+
+        //TODO: retourner les infos d'un utilisateur
+
         return null;
     }
 
@@ -66,6 +48,9 @@ public class ServiceWS {
     @Consumes(MediaType.APPLICATION_XML)
     @Produces("text/plain")
     public String postTweet(JAXBElement<Tweet> tweetText) {
+
+        //TODO: le post d'un tweet
+
         return null;
     }
 
@@ -120,6 +105,9 @@ public class ServiceWS {
     @Consumes("text/plain")
     @Produces("text/plain")
     public String disconnect(@PathParam("user")String utilisateur) {
+
+        //TODO: déconnection du client "user"
+
         return null;
     }
 }

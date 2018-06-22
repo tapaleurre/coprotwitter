@@ -100,7 +100,9 @@ public class ClientWS {
             loggedUser = new UserInfo(credential.getIdentifier(),key);
         }
         System.out.println(ClientWS.ping());
+
         //TODO try to actually connect
+
         while (true){
             switch (userInterface.promptMenu()){
                 case CONNECT:
