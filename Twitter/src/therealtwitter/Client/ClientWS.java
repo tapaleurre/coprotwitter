@@ -96,6 +96,9 @@ public class ClientWS {
 
         while (true){
             switch (userInterface.promptMenu()){
+                case FOLLOW_UNFOLLOW:
+                    
+                    break;
                 case CONNECT:
                     Credential credential = userInterface.getCredentials();
                     String response = ClientWS.connect(credential.getPassword(),credential.getIdentifier());
