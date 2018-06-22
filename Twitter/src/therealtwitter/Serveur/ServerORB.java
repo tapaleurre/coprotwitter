@@ -37,10 +37,6 @@ class TwitterImpl extends TwitterServicePOA {
         TwitterImpl.RMIService = ClientRMI.getservice();
     }
 
-    // implement sayHello() method
-    public String sayHello() {
-        return "\nHello world !!\n";
-    }
 
     @Override
     public String ping() {
@@ -110,10 +106,11 @@ class TwitterImpl extends TwitterServicePOA {
                 loggedList.add(new UserInfo(username, key));
                 return key;
             }
-            return -1;
+            return (double) -1;
         } catch (RemoteException e) {
-            return -2;
+            return (double) -2;
         }
+        //TODO:fix
     }
 
     @Override
@@ -144,7 +141,48 @@ public class ServerORB {
 
     public static final String SERVICE_NAME = "TwitterService";
 
-    public static void main(String[] argv) throws InvalidName, AdapterInactive, ServantNotActive, WrongPolicy, org.omg.CosNaming.NamingContextPackage.InvalidName, CannotProceed, AlreadyBound, NotFound {
+    public static void main(String[] argv) throws InvalidName, AdapterInactive, ServantNotActive, WrongPolicy, org.omg.CosNaming.NamingContextPackage.InvalidName, CannotProceed, NotFound {
+        try{
+            Properties props = new Properties();
+            props.put("org.omg.CORBA.ORBInitialHost", "127.0.0.1");
+            props.put("org.omg.CORBA.ORBInitialPort", "1337");
+            // create and initialize the ORB
+            ORB orb = ORB.init(argv, props);
+
+            // get reference to rootpoa & activate the POAManager
+            POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
+            rootpoa.the_POAManager().activate();
+
+            // create servant and register it with the ORB
+            TwitterImpl helloImpl = new TwitterImpl();
+            helloImpl.setORB(orb);
+
+            // get object reference from the servant
+            org.omg.CORBA.Object ref = rootpoa.servant_to_reference(helloImpl);
+            TwitterService href = TwitterServiceHelper.narrow(ref);
+
+            // get the root naming context
+            org.omg.CORBA.Object objRef =
+                    orb.resolve_initial_references("NameService");
+            // Use NamingContextExt which is part of the Interoperable
+            // Naming Service (INS) specification.
+            NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
+
+            // bind the Object Reference in Naming
+            NameComponent path[] = ncRef.to_name( SERVICE_NAME );
+            ncRef.rebind(path, href);
+
+            System.out.println("Server ready and waiting ...");
+
+            // wait for invocations from clients
+            orb.run();
+        }
+
+        catch (Exception e) {
+            System.err.println("ERROR: " + e);
+            e.printStackTrace(System.out);
+        }
+        /*
         System.out.println("Hey i'm a server !");
         // Paramétrage pour la création de la couche ORB :
         // localisation de l'annuaire d'objet (service nommage)
@@ -152,24 +190,29 @@ public class ServerORB {
         props.put("org.omg.CORBA.ORBInitialHost", "127.0.0.1");
         props.put("org.omg.CORBA.ORBInitialPort", "1337");
         ORB orb = ORB.init((String[]) null, props);
+
         //rechercher rootPOA
         org.omg.CORBA.Object poaRef = orb.resolve_initial_references("RootPOA");
         //creer l'objet rootPOA
         POA rootPoa = POAHelper.narrow(poaRef);
         //Activation du service RootPOA
         rootPoa.the_POAManager().activate();
+
+        TwitterImpl twitterImpl = new TwitterImpl();
+        twitterImpl.setORB(orb);
+
+        org.omg.CORBA.Object monServiceRef = rootPoa.servant_to_reference(twitterImpl);
+        TwitterService monService = TwitterServiceHelper.narrow(monServiceRef);
+
         //Recherche d'une référence sur un service de nommage
         org.omg.CORBA.Object serviceNommageRef;
         serviceNommageRef = orb.resolve_initial_references("NameService");
+
         // Instance du service de nommage à partir de sa référence
         // ("cast" façon TwitterService)
         NamingContextExt serviceNommage = NamingContextExtHelper.narrow(serviceNommageRef);
-        TwitterImpl i = new TwitterImpl();
-        org.omg.CORBA.Object monServiceRef;
-        monServiceRef = rootPoa.servant_to_reference(i);
-        TwitterService monService = TwitterServiceHelper.narrow(monServiceRef);
         NameComponent[] path = serviceNommage.to_name(SERVICE_NAME);
         serviceNommage.rebind(path, monService);
-        orb.run();
+        orb.run();*/
     }
 }

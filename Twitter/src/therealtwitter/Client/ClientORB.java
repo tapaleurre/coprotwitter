@@ -23,9 +23,37 @@ public class ClientORB {
 
     private static ClientUI userInterface;
     public static final String SERVICE_NAME = "TwitterService";
+    static TwitterService monService;
     private static UserInfo loggedUser = null;
 
     public static void main(String[] argv) throws InvalidName, CannotProceed, org.omg.CosNaming.NamingContextPackage.InvalidName, NotFound, Tweet.TweetTooLongException {
+        try{
+            Properties props = new Properties();
+            props.put("org.omg.CORBA.ORBInitialHost", "127.0.0.1");
+            props.put("org.omg.CORBA.ORBInitialPort", "1337");
+            // create and initialize the ORB
+            ORB orb = ORB.init(argv, props);
+
+            // get the root naming context
+            org.omg.CORBA.Object objRef =
+                    orb.resolve_initial_references("NameService");
+            // Use NamingContextExt instead of NamingContext. This is
+            // part of the Interoperable naming Service.
+            NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
+
+            // resolve the Object Reference in Naming
+            monService = TwitterServiceHelper.narrow(ncRef.resolve_str(SERVICE_NAME));
+
+            System.out.println("Obtained a handle on server object: " + monService);
+            System.out.println(monService.ping());
+            //monService.shutdown();
+
+        } catch (Exception e) {
+            System.out.println("ERROR : " + e) ;
+            e.printStackTrace(System.out);
+        }
+
+        /*
         System.out.println("Hey i'm a client");
         // Paramétrage pour la création de la couche ORB :
         // localisation de l'annuaire d'objet (service nommage)
@@ -45,18 +73,23 @@ public class ClientORB {
         org.omg.CORBA.Object monServiceRef;
         monServiceRef = serviceNommage.resolve_str(SERVICE_NAME);
         TwitterService monService = TwitterServiceHelper.narrow(monServiceRef);
-        userInterface.displayInfo(monService.ping());
+        //orb.connect(monService);
+        //userInterface.displayInfo(monService.ping());
+        */
 
         ClientORB.userInterface = new CommandLineUI();
         while(ClientORB.loggedUser == null){
             Credential credential = userInterface.getCredentials();
             double key = monService.connect(credential.getPassword(),credential.getIdentifier());
             clientConnect(credential, key);
+            System.out.println("key: "+key);
+            loggedUser = new UserInfo(credential.getIdentifier(),key);
         }
         System.out.println(monService.ping());
 
         while (true){
-            switch (userInterface.promptMenu()){
+            UserAction action = userInterface.promptMenu();
+            switch (action){
                 case CONNECT:
                     Credential credential = userInterface.getCredentials();
                     double key = monService.connect(credential.getPassword(),credential.getIdentifier());

@@ -54,18 +54,20 @@ public class CommandLineUI implements ClientUI {
 
     @Override
     public UserAction promptMenu() {
-        int choice = 0;
-        while(choice <=6 && choice > 0){
+        String text = "";
+        for(UserAction choice : UserAction.values()){
             Scanner reader = new Scanner(System.in);
             String selection = "";
             for (UserAction a : UserAction.values()){
                 selection+=a.ordinal()+" - " + a.name() + "\n";
             }
             System.out.println(selection);
-            String text = reader.nextLine();
-            choice = Integer.parseInt(text);
+            text = reader.nextLine();
         }
-        return UserAction.values()[choice];
+        UserAction result;
+        result = UserAction.values()[Integer.parseInt(text)];
+        //TODO: foolproof
+        return result;
     }
 
     @Override
