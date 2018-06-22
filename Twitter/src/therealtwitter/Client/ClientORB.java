@@ -53,30 +53,6 @@ public class ClientORB {
             e.printStackTrace(System.out);
         }
 
-        /*
-        System.out.println("Hey i'm a client");
-        // Paramétrage pour la création de la couche ORB :
-        // localisation de l'annuaire d'objet (service nommage)
-        Properties props = new Properties();
-        props.put("org.omg.CORBA.ORBInitialPort", "1337");
-        props.put("org.omg.CORBA.ORBInitialHost", "127.0.0.1");
-        // Création de la couche ORB
-        // pour communiquer via un bus TwitterService
-        ORB orb = ORB.init((String[]) null, props);
-        // Recherche d'une référence sur un service de nommage
-        org.omg.CORBA.Object serviceNommageRef;
-        serviceNommageRef = orb.resolve_initial_references("NameService");
-        // Instance du service de nommage à partir de sa référence
-        // ("cast" façon TwitterService)
-        NamingContextExt serviceNommage = NamingContextExtHelper.narrow(serviceNommageRef);
-        // Recherche d'une référence sur le service météo
-        org.omg.CORBA.Object monServiceRef;
-        monServiceRef = serviceNommage.resolve_str(SERVICE_NAME);
-        TwitterService monService = TwitterServiceHelper.narrow(monServiceRef);
-        //orb.connect(monService);
-        //userInterface.displayInfo(monService.ping());
-        */
-
         ClientORB.userInterface = new CommandLineUI();
         while(ClientORB.loggedUser == null){
             Credential credential = userInterface.getCredentials();
